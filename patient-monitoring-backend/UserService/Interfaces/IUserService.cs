@@ -6,5 +6,6 @@ namespace UserService.Interfaces
     {
         Task PatientSignupAsync(PatientSignupDto dto);
         Task DoctorSignupAsync(DoctorSignupDto dto);
+        Task ActivateUserAsync(Guid userId);
     }
 }

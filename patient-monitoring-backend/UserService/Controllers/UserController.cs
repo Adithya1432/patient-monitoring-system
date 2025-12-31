@@ -43,5 +43,28 @@ namespace UserService.Controllers
                 return Conflict(new { error = ex.Message });
             }
         }
+
+
+        [HttpPatch("{userId:guid}/activate")]
+        public async Task<IActionResult> ActivateUser(Guid userId)
+        {
+            try
+            {
+                await _service.ActivateUserAsync(userId);
+                return Ok(new { message = "Account activated" });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { error = ex.Message });
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { error = "Unexpected error" });
+            }
+        }
     }
 }
