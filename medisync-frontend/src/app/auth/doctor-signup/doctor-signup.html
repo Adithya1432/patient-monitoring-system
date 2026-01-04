@@ -1,0 +1,157 @@
+<div class="split-layout">
+    <!-- Left Side: Brand & Visuals -->
+    <div class="brand-panel">
+        <div class="brand-content">
+            <div class="brand-logo">
+                <svg viewBox="0 0 24 24" fill="none" class="logo-svg">
+                    <path
+                        d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M12 8V16M8 12H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+                <span class="logo-text">MediSync</span>
+            </div>
+
+            <div class="brand-hero">
+                <h1>Join the Network<br>of Excellence.</h1>
+                <p>Connect with patients, manage your schedule efficienty, and grow your practice with our advanced
+                    tools.</p>
+
+                <div class="feature-pills">
+                    <div class="pill"><mat-icon>people</mat-icon> Patient Management</div>
+                    <div class="pill"><mat-icon>event_available</mat-icon> Smart Scheduling</div>
+                    <div class="pill"><mat-icon>analytics</mat-icon> Practice Insights</div>
+                </div>
+            </div>
+
+            <div class="brand-footer">
+                © 2024 MediSync Inc.
+            </div>
+        </div>
+
+        <!-- Abstract Shapes -->
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+    </div>
+
+    <!-- Right Side: Registration Form -->
+    <div class="form-panel">
+        <div class="form-container">
+            <div class="form-header">
+                <h2>Doctor Registration</h2>
+                <p>Create your professional account</p>
+            </div>
+
+            <form [formGroup]="signupForm" (ngSubmit)="submit()">
+                <div class="form-grid">
+                    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                        <mat-label>Doctor Name</mat-label>
+                        <input matInput formControlName="name" placeholder="Dr. John Doe">
+                        <mat-icon matSuffix>person</mat-icon>
+                        <mat-error *ngIf="signupForm.get('name')?.hasError('required')">Name is required</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                        <mat-label>Email Address</mat-label>
+                        <input matInput type="email" formControlName="email">
+                        <mat-icon matSuffix>email</mat-icon>
+                        <mat-error *ngIf="signupForm.get('email')?.hasError('email')">Invalid email address</mat-error>
+                        <mat-error *ngIf="signupForm.get('email')?.hasError('required')">Email is required</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                        <mat-label>Mobile Number</mat-label>
+                        <input matInput type="tel" formControlName="phone">
+                        <mat-icon matSuffix>phone</mat-icon>
+                        <mat-error *ngIf="signupForm.get('phone')?.hasError('pattern')">Invalid mobile
+                            number</mat-error>
+                        <mat-error *ngIf="signupForm.get('phone')?.hasError('required')">Mobile is required</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                        <mat-label>Create Password</mat-label>
+                        <input matInput type="password" formControlName="password">
+                        <mat-icon matSuffix>lock</mat-icon>
+                        <mat-error *ngIf="signupForm.get('password')?.hasError('minlength')">Must be at least 6
+                            characters</mat-error>
+                        <mat-error *ngIf="signupForm.get('password')?.hasError('required')">Password is
+                            required</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                        <mat-label>Medical Registration Number</mat-label>
+                        <input matInput formControlName="registrationNumber">
+                        <mat-icon matSuffix>badge</mat-icon>
+                        <mat-error *ngIf="signupForm.get('registrationNumber')?.hasError('required')">Registration
+                            number is required</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                        <mat-label>Experience (Years)</mat-label>
+                        <input matInput type="number" formControlName="yearsOfExperience" min="0">
+                        <mat-icon matSuffix>timeline</mat-icon>
+                        <mat-error *ngIf="signupForm.get('yearsOfExperience')?.hasError('required')">Experience is
+                            required</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                        <mat-label>Specialty</mat-label>
+                        <mat-select formControlName="specialty">
+                            <mat-option *ngFor="let spec of specialties" [value]="spec">
+                                {{spec}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="signupForm.get('specialty')?.hasError('required')">Specialty is
+                            required</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                        <mat-label>Consultation Type</mat-label>
+                        <mat-select formControlName="consultationType">
+                            <mat-option *ngFor="let type of consultationTypes" [value]="type">
+                                {{type}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="signupForm.get('consultationType')?.hasError('required')">Type is
+                            required</mat-error>
+                    </mat-form-field>
+
+
+                    <div class="dob-gender-row">
+                        <mat-form-field appearance="outline" class="dob-field" subscriptSizing="dynamic">
+                            <mat-label>Date of Birth</mat-label>
+                            <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" readonly>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                            <mat-error *ngIf="signupForm.get('dateOfBirth')?.hasError('required')">Required</mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                            <mat-label>Gender</mat-label>
+                            <mat-select formControlName="gender">
+                                <mat-option value="male">Male</mat-option>
+                                <mat-option value="female">Female</mat-option>
+                                <mat-option value="other">Other</mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="signupForm.get('gender')?.hasError('required')">Required</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button mat-flat-button color="primary" class="submit-btn" type="submit"
+                        [disabled]="signupForm.invalid || signupForm.pristine">
+                        Register as Doctor
+                    </button>
+                    <div class="login-link">
+                        Already have an account? <a routerLink="/login">Sign in</a>
+                    </div>
+                    <div class="login-link">
+                        Are you a patient? <a routerLink="/patient-signup">Register here</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

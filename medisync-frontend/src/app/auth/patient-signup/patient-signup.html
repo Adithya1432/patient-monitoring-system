@@ -1,60 +1,116 @@
-<div class="signup-container">
-  <mat-card class="signup-card">
+<div class="split-layout">
+  <!-- Left Side: Brand & Visuals -->
+  <div class="brand-panel">
+    <div class="brand-content">
+      <div class="brand-logo">
+        <svg viewBox="0 0 24 24" fill="none" class="logo-svg">
+          <path
+            d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M12 8V16M8 12H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+        <span class="logo-text">MediSync</span>
+      </div>
 
-    <div class="header">
-      <h1>Create Account</h1>
-      <p>Patient Registration</p>
+      <div class="brand-hero">
+        <h1>Easy Appointment<br>Scheduling.</h1>
+        <p>Book visits with top doctors, manage your appointments, and keep track of your medical history with ease.</p>
+
+        <div class="feature-pills">
+          <div class="pill"><mat-icon>calendar_today</mat-icon> 24/7 Booking</div>
+          <div class="pill"><mat-icon>notifications</mat-icon> Smart Reminders</div>
+          <div class="pill"><mat-icon>history</mat-icon> Medical History</div>
+        </div>
+      </div>
+
+      <div class="brand-footer">
+        © 2024 MediSync Inc.
+      </div>
     </div>
 
-    <form [formGroup]="signupForm" (ngSubmit)="submit()">
+    <!-- Abstract Shapes -->
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+  </div>
 
-      <div class="grid">
-        <mat-form-field appearance="outline">
-          <mat-label>Full Name</mat-label>
-          <input matInput formControlName="name">
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Email</mat-label>
-          <input matInput type="email" formControlName="email">
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Mobile Number</mat-label>
-          <input matInput type="tel" formControlName="mobile">
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Password</mat-label>
-          <input matInput type="password" formControlName="password">
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Date of Birth</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="dob">
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
+  <!-- Right Side: Registration Form -->
+  <div class="form-panel">
+    <div class="form-container">
+      <div class="form-header">
+        <h2>Create Account</h2>
+        <p>Get started with your patient portal</p>
       </div>
 
-      <div class="gender-section">
-        <label>Gender</label>
-        <mat-radio-group formControlName="gender">
-          <mat-radio-button value="male">Male</mat-radio-button>
-          <mat-radio-button value="female">Female</mat-radio-button>
-        </mat-radio-group>
-      </div>
+      <form [formGroup]="signupForm" (ngSubmit)="submit()">
+        <div class="form-grid">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Full Name</mat-label>
+            <input matInput formControlName="name" placeholder="John Doe">
+            <mat-icon matSuffix>person</mat-icon>
+            <mat-error *ngIf="signupForm.get('name')?.hasError('required')">Name is required</mat-error>
+          </mat-form-field>
 
-      <button
-        mat-raised-button
-        color="primary"
-        class="submit-btn"
-        type="submit"
-        [disabled]="signupForm.invalid">
-        Create Account
-      </button>
+          <mat-form-field appearance="outline">
+            <mat-label>Email Address</mat-label>
+            <input matInput type="email" formControlName="email" placeholder="john@example.com">
+            <mat-icon matSuffix>email</mat-icon>
+            <mat-error *ngIf="signupForm.get('email')?.hasError('email')">Invalid email address</mat-error>
+            <mat-error *ngIf="signupForm.get('email')?.hasError('required')">Email is required</mat-error>
+          </mat-form-field>
 
-    </form>
+          <mat-form-field appearance="outline">
+            <mat-label>Mobile Number</mat-label>
+            <input matInput type="tel" formControlName="phone" placeholder="9876543210">
+            <mat-icon matSuffix>phone</mat-icon>
+            <mat-error *ngIf="signupForm.get('phone')?.hasError('pattern')">Invalid mobile number</mat-error>
+            <mat-error *ngIf="signupForm.get('phone')?.hasError('required')">Mobile is required</mat-error>
+          </mat-form-field>
 
-  </mat-card>
+          <mat-form-field appearance="outline">
+            <mat-label>Date of Birth</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" readonly>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="signupForm.get('dob')?.hasError('required')">Date of birth is required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Create Password</mat-label>
+            <input matInput type="password" formControlName="password">
+            <mat-icon matSuffix>lock</mat-icon>
+            <mat-error *ngIf="signupForm.get('password')?.hasError('minlength')">Must be at least 6
+              characters</mat-error>
+            <mat-error *ngIf="signupForm.get('password')?.hasError('required')">Password is required</mat-error>
+          </mat-form-field>
+
+          <div class="gender-section">
+            <label>Gender</label>
+            <mat-radio-group formControlName="gender" color="primary">
+              <mat-radio-button value="male">Male</mat-radio-button>
+              <mat-radio-button value="female">Female</mat-radio-button>
+              <mat-radio-button value="other">Other</mat-radio-button>
+            </mat-radio-group>
+            <mat-error *ngIf="signupForm.get('gender')?.touched && signupForm.get('gender')?.hasError('required')"
+              class="radio-error">
+              Please select a gender
+            </mat-error>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button mat-flat-button color="primary" class="submit-btn" type="submit"
+            [disabled]="signupForm.invalid || signupForm.pristine">
+            Create Account
+          </button>
+          <div class="login-link">
+            Already have an account? <a routerLink="/login">Sign in</a>
+          </div>
+          <div class="login-link">
+            Are you a doctor? <a routerLink="/doctor-signup">Register here</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>

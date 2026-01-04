@@ -7,30 +7,37 @@ import { FormBuilder, Validators, ReactiveFormsModule, FormGroup } from '@angula
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatRadioModule } from '@angular/material/radio';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 
 import { Auth } from '../../core/services/auth';
 
 @Component({
-  selector: 'app-patient-signup',
-  imports: [CommonModule,
+  selector: 'app-doctor-signup',
+  imports: [
+    CommonModule,
     ReactiveFormsModule,
     MatCardModule,
     MatInputModule,
     MatButtonModule,
-    MatButtonModule,
-    MatRadioModule,
     MatDatepickerModule,
-    MatDatepickerModule,
+    MatSelectModule,
     MatIconModule,
-    RouterLink],
-  templateUrl: './patient-signup.html',
-  styleUrl: './patient-signup.css',
+    RouterLink
+  ],
+  templateUrl: './doctor-signup.html',
+  styleUrl: './doctor-signup.css',
 })
-export class PatientSignup {
+export class DoctorSignup {
   signupForm!: FormGroup;
+
+  specialties: string[] = [
+    'General Physician', 'Cardiologist', 'Dermatologist',
+    'Neurologist', 'Pediatrician', 'Orthopedist', 'Psychiatrist'
+  ];
+
+  consultationTypes: string[] = ['Online', 'In-Person'];
 
   constructor(private fb: FormBuilder, private authService: Auth) {
     this.signupForm = this.fb.group({
@@ -38,6 +45,10 @@ export class PatientSignup {
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
+      registrationNumber: ['', Validators.required],
+      specialty: ['', Validators.required],
+      yearsOfExperience: ['', [Validators.required, Validators.min(0)]],
+      consultationType: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
       gender: ['', Validators.required]
     });
@@ -56,14 +67,14 @@ export class PatientSignup {
         formValue.dateOfBirth = `${year}-${month}-${day}`;
       }
 
-      console.log('Submitting:', formValue);
-      this.authService.patientSignup(formValue).subscribe({
+      console.log('Submitting Doctor:', formValue);
+      this.authService.doctorSignup(formValue).subscribe({
         next: (response) => {
-          console.log('Signup successful', response);
-          // Handle success (e.g., navigate to login)
+          console.log('Doctor Signup successful', response);
+          // Handle success
         },
         error: (error) => {
-          console.error('Signup failed', error);
+          console.error('Doctor Signup failed', error);
           // Handle error
         }
       });

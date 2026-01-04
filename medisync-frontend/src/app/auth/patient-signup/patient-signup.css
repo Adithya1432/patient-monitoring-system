@@ -1,60 +1,184 @@
-/* Page background */
-.signup-container {
-  min-height: 100vh;
+/* Google Fonts Import would be global */
+:host {
+  display: block;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  height: 100vh;
+}
+
+.split-layout {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+/* --- Brand Panel (Left) --- */
+.brand-panel {
+  flex: 0 0 40%;
+  position: relative;
+  background: linear-gradient(135deg, #004d40 0%, #00897b 100%);
+  color: white;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.brand-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: auto;
+}
+
+.logo-svg {
+  width: 32px;
+  height: 32px;
+}
+
+.logo-text {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.brand-hero h1 {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 24px;
+}
+
+.brand-hero p {
+  font-size: 18px;
+  opacity: 0.9;
+  line-height: 1.5;
+  margin-bottom: 32px;
+  max-width: 400px;
+}
+
+.feature-pills {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  font-size: 15px;
+  opacity: 0.9;
+}
+
+.pill mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.brand-footer {
+  margin-top: auto;
+  font-size: 12px;
+  opacity: 0.6;
+  padding-top: 40px;
+}
+
+/* Decorative Shapes */
+.shape {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  z-index: 1;
+}
+
+.shape-1 {
+  width: 500px;
+  height: 500px;
+  top: -100px;
+  right: -100px;
+}
+
+.shape-2 {
+  width: 300px;
+  height: 300px;
+  bottom: -50px;
+  left: -50px;
+}
+
+/* --- Form Panel (Right) --- */
+.form-panel {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, #f4f8fc, #ffffff);
-  padding: 24px;
+  overflow-y: auto;
+  background-color: #ffffff;
 }
 
-/* Card */
-.signup-card {
+.form-container {
   width: 100%;
-  max-width: 720px;
-  padding: 32px;
-  border-radius: 16px;
+  max-width: 560px;
+  padding: 40px;
 }
 
-/* Header */
-.header {
-  text-align: center;
+.form-header {
   margin-bottom: 32px;
 }
 
-.header h1 {
-  font-size: 28px;
-  font-weight: 600;
-  margin: 0;
-  color: #1f2937;
+.form-header h2 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
 }
 
-.header p {
-  margin-top: 6px;
+.form-header p {
   color: #6b7280;
+  font-size: 16px;
+  margin: 0;
 }
 
-/* Grid */
-.grid {
+/* Form Grid */
+.form-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.full-width,
+mat-form-field:has(input[formControlName="name"]),
+mat-form-field:has(input[formControlName="password"]) {
+  grid-column: span 2;
 }
 
 mat-form-field {
   width: 100%;
 }
 
-/* Gender */
+/* Gender Section */
 .gender-section {
-  margin: 24px 0;
+  grid-column: span 2;
+  margin: 8px 0 24px 0;
 }
 
 .gender-section label {
   display: block;
-  margin-bottom: 8px;
+  font-size: 14px;
   font-weight: 500;
   color: #374151;
+  margin-bottom: 12px;
 }
 
 mat-radio-group {
@@ -62,17 +186,84 @@ mat-radio-group {
   gap: 24px;
 }
 
-/* Button */
+.radio-error {
+  color: #ef4444;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 .submit-btn {
   width: 100%;
-  padding: 14px;
+  height: 52px;
   font-size: 16px;
+  font-weight: 600;
   border-radius: 8px;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .grid {
+.login-link {
+  text-align: center;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.login-link a {
+  color: #00897b;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+  color: #004d40;
+}
+
+/* --- Responsive --- */
+@media (max-width: 900px) {
+  .split-layout {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .brand-panel {
+    flex: 0 0 auto;
+    padding: 40px 24px;
+    min-height: 200px;
+  }
+
+  .brand-hero h1 {
+    font-size: 32px;
+  }
+
+  .brand-footer,
+  .brand-hero p,
+  .feature-pills {
+    display: none;
+    /* Simplify header on mobile */
+  }
+
+  .form-panel {
+    padding: 0;
+    align-items: flex-start;
+  }
+
+  .form-container {
+    padding: 24px;
+    max-width: 100%;
+  }
+
+  .form-grid {
     grid-template-columns: 1fr;
+  }
+
+  .full-width {
+    grid-column: span 1;
   }
 }
