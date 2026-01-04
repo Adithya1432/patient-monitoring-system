@@ -1,7 +1,9 @@
-﻿using System.Security.Cryptography;
-using System.Text;
+﻿using Azure.Core;
 using Microsoft.Extensions.Logging;
+using System.Security.Cryptography;
+using System.Text;
 using UserService.DTOs;
+using UserService.Helpers;
 using UserService.Interfaces;
 using UserService.Models;
 
@@ -46,7 +48,7 @@ namespace UserService.Services
                     FullName = dto.Name,
                     Email = dto.Email,
                     Phone = dto.Phone,
-                    Password = Hash(dto.Password),
+                    PasswordHash = PasswordHasher.Hash(dto.Password),
                     Role = "Patient",
                     AccountStatus = "Active",
                     CreatedAt = DateTime.Now,
@@ -117,7 +119,7 @@ namespace UserService.Services
                     FullName = dto.Name,
                     Email = dto.Email,
                     Phone = dto.Phone,
-                    Password = Hash(dto.Password),
+                    PasswordHash = PasswordHasher.Hash(dto.Password),
                     Role = "Doctor",
                     AccountStatus = "Pending Approval",
                     CreatedAt = DateTime.Now,
@@ -209,14 +211,6 @@ namespace UserService.Services
                 _logger.LogError(ex, "Unexpected error while activating user {UserId}", userId);
                 throw;
             }
-        }
-
-        private static string Hash(string password)
-        {
-            using var sha = SHA256.Create();
-            return Convert.ToBase64String(
-                sha.ComputeHash(Encoding.UTF8.GetBytes(password))
-            );
         }
     }
 }

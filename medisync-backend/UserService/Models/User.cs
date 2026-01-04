@@ -21,7 +21,7 @@ namespace UserService.Models
 
         [Required]
         [MaxLength(100)]
-        public string Password { get; set; } = null!;
+        public string PasswordHash { get; set; } = null!;
 
         [Required]
         [MaxLength(20)]

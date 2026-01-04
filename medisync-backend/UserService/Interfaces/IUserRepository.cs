@@ -12,6 +12,7 @@ namespace UserService.Interfaces
         Task CreateUserAndPatientAsync(User user, Patient patient, UserAudit audit);
         Task<User?> GetByIdAsync(Guid userId);
         Task UpdateAccountStatusAsync(Guid userId, string newStatus, UserAudit audit);
+        Task<User?> GetByEmailAsync(string email);
     }
 
 }
