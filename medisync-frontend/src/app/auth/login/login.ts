@@ -43,7 +43,10 @@ export class LoginComponent {
             this.router.navigate(['/patient/dashboard']);
           } else if (response.role === 'Doctor') {
             this.router.navigate(['/doctor/dashboard']);
-          } else {
+          } else if (response.role === 'Admin') {
+            this.router.navigate(['/admin/dashboard']);
+          }
+          else {
             // Default fallback
             this.router.navigate(['/patient/dashboard']);
           }
