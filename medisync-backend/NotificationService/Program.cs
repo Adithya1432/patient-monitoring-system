@@ -1,9 +1,9 @@
-using DoctorAvailabilityService.Data;
 using Microsoft.EntityFrameworkCore;
+using NotificationService.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<DoctorAvailabilityDbContext>(options =>
+builder.Services.AddDbContext<NotificationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });

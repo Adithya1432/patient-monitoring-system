@@ -1,9 +1,8 @@
-using DoctorAvailabilityService.Data;
+using AnalyticsService.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddDbContext<DoctorAvailabilityDbContext>(options =>
+builder.Services.AddDbContext<AnalyticsDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });

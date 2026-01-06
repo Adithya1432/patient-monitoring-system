@@ -1,6 +1,6 @@
 ﻿namespace AppointmentService.Services
 {
-    public class AppointmentService
+    public class AppointmentsService
     {
     }
 }

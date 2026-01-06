@@ -1,9 +1,8 @@
-using DoctorAvailabilityService.Data;
 using Microsoft.EntityFrameworkCore;
+using ResourceOptimizationService.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddDbContext<DoctorAvailabilityDbContext>(options =>
+builder.Services.AddDbContext<ResourceOptimizationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
