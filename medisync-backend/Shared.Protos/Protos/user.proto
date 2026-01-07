@@ -1,0 +1,19 @@
+﻿syntax = "proto3";
+option csharp_namespace = "Shared.Protos.User";
+
+service DoctorUserService {
+  rpc GetDoctorsBySpeciality (SpecialityRequest)
+      returns (DoctorListResponse);
+}
+
+message SpecialityRequest {
+  string speciality = 1;
+}
+
+message DoctorDto {
+  string doctorId = 1;
+}
+
+message DoctorListResponse {
+  repeated DoctorDto doctors = 1;
+}

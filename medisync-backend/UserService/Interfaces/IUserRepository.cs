@@ -13,6 +13,7 @@ namespace UserService.Interfaces
         Task<User?> GetByIdAsync(Guid userId);
         Task UpdateAccountStatusAsync(Guid userId, string newStatus, UserAudit audit);
         Task<User?> GetByEmailAsync(string email);
+        Task<List<Guid>> GetDoctorsBySpecialityAsync(string speciality);
     }
 
 }

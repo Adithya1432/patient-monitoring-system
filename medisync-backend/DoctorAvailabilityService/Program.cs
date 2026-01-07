@@ -1,4 +1,8 @@
 using DoctorAvailabilityService.Data;
+using DoctorAvailabilityService.GrpcServices;
+using DoctorAvailabilityService.Interfaces;
+using DoctorAvailabilityService.Repositories;
+using DoctorAvailabilityService.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +11,11 @@ builder.Services.AddDbContext<DoctorAvailabilityDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddScoped<IDoctorAvailabilityRepository, DoctorAvailabilityRepository>();
+builder.Services.AddScoped<IDoctorAvailabilityService, DoctorAvailableService>();
+
+builder.Services.AddGrpc();
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -28,5 +37,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapGrpcService<DoctorAvailabilityGrpcService>();
 
 app.Run();

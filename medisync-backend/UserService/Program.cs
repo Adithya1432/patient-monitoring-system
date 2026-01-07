@@ -1,8 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using UserService.Data;
+using UserService.GrpcServices;
 using UserService.Interfaces;
 using UserService.Repositories;
 using UserService.Services;
+using Microsoft.AspNetCore.Server.Kestrel.Core; // Add this using
+using Grpc.AspNetCore.Server; // Add this using
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,8 +18,10 @@ builder.Services.AddDbContext<UserDbContext>(options =>
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UsersService>();
-builder.Services.AddScoped<IAuthService, AuthService>(); ;
+builder.Services.AddScoped<IAuthService, AuthService>();
 
+// Add gRPC services
+builder.Services.AddGrpc();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -38,5 +43,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.MapGrpcService<UserGrpcService>();
 app.Run();

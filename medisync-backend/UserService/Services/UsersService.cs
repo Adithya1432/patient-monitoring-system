@@ -100,7 +100,7 @@ namespace UserService.Services
                 || string.IsNullOrWhiteSpace(dto.Phone)
                 || string.IsNullOrWhiteSpace(dto.Password)
                 || string.IsNullOrWhiteSpace(dto.RegistrationNumber)
-                || string.IsNullOrWhiteSpace(dto.Specialty)
+                || string.IsNullOrWhiteSpace(dto.Speciality)
                 || string.IsNullOrWhiteSpace(dto.ConsultationType))
             {
                 throw new InvalidOperationException("Incomplete signup payload. All user and doctor fields are required.");
@@ -130,7 +130,7 @@ namespace UserService.Services
                 {
                     UserId = userId,
                     RegistrationNumber = dto.RegistrationNumber,
-                    Specialty = dto.Specialty,
+                    Speciality = dto.Speciality,
                     YearsOfExperience = dto.YearsOfExperience,
                     ConsultationType = dto.ConsultationType,
                     DateOfBirth = dto.DateOfBirth,
@@ -212,6 +212,9 @@ namespace UserService.Services
                 throw;
             }
         }
+
+        public Task<List<Guid>> GetDoctorsBySpecialityAsync(string speciality)
+        => _repository.GetDoctorsBySpecialityAsync(speciality);
     }
 }
 

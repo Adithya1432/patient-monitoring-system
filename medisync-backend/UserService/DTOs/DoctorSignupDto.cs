@@ -21,7 +21,7 @@ namespace UserService.DTOs
 
         [Required]
         [MaxLength(100)]
-        public string Specialty { get; set; } = null!;
+        public string Speciality { get; set; } = null!;
 
         public int YearsOfExperience { get; set; }
         [Required]

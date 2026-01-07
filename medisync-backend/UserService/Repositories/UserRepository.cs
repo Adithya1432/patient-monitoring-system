@@ -119,6 +119,14 @@ namespace UserService.Repositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
+
+        public async Task<List<Guid>> GetDoctorsBySpecialityAsync(string speciality)
+        {
+            return await _context.Doctors
+                .Where(d => d.Speciality == speciality)
+                .Select(d => d.UserId)
+                .ToListAsync();
+        }
     }
 
 }

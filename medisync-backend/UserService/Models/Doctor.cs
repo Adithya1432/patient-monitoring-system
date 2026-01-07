@@ -15,7 +15,7 @@ namespace UserService.Models
 
         [Required]
         [MaxLength(100)]
-        public string Specialty { get; set; } = null!;
+        public string Speciality { get; set; } = null!;
 
         public int YearsOfExperience { get; set; }
 

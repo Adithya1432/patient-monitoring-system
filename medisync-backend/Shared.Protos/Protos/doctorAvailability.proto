@@ -1,0 +1,17 @@
+﻿syntax = "proto3";
+option csharp_namespace = "Shared.Protos.DoctorAvailability";
+
+service DoctorAvailabilityCheckService {
+  rpc IsDoctorAvailable (DoctorAvailabilityRequest)
+      returns (DoctorAvailabilityResponse);
+}
+
+message DoctorAvailabilityRequest {
+  string doctorId = 1;
+  string startTime = 2;
+  string endTime = 3;
+}
+
+message DoctorAvailabilityResponse {
+  bool isAvailable = 1;
+}
