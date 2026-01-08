@@ -32,6 +32,29 @@ namespace AppointmentService.Repositories
             _context.Appointments.Add(appointment);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<int> GetDailyAppointmentCountAsync(
+        Guid doctorId, DateOnly date)
+        {
+            return await _context.Appointments.CountAsync(a =>
+                a.DoctorId == doctorId &&
+                DateOnly.FromDateTime(a.ScheduledStartTime) == date &&
+                a.Status == "Scheduled");
+        }
+
+        public async Task<int> GetDailyWorkingMinutesAsync(
+            Guid doctorId, DateOnly date)
+        {
+            return await _context.Appointments
+                .Where(a =>
+                    a.DoctorId == doctorId &&
+                    DateOnly.FromDateTime(a.ScheduledStartTime) == date &&
+                    a.Status == "Scheduled")
+                .SumAsync(a =>
+                    EF.Functions.DateDiffMinute(
+                        a.ScheduledStartTime,
+                        a.ScheduledEndTime));
+        }
     }
 
 }

@@ -21,6 +21,7 @@
     <ProjectReference Include="..\Shared.Protos\Shared.Protos.csproj" />
 	  <Protobuf Include="..\Shared.Protos\Protos\user.proto" GrpcServices="Client" />
 	  <Protobuf Include="..\Shared.Protos\Protos\doctorAvailability.proto" GrpcServices="Client" />
+	  <Protobuf Include="..\Shared.Protos\Protos\optimization.proto" GrpcServices="Client" />
   </ItemGroup>
 
 </Project>

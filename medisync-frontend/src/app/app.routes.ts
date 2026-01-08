@@ -25,7 +25,7 @@ export const routes: Routes = [
         children: [
             {
                 path: 'dashboard',
-                loadComponent: () => import('./patient/dashboard/patient-dashboard/patient-dashboard').then(m => m.PatientDashboard)
+                loadComponent: () => import('./patient/patient-dashboard/patient-dashboard').then(m => m.PatientDashboard)
             },
             { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
         ]
@@ -41,5 +41,6 @@ export const routes: Routes = [
             { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
         ]
     },
+    {path:'patient/book-appointment',loadComponent:()=>import('./patient/book-appointment/book-appointment').then(m=>m.BookAppointment)},
     { path: '', redirectTo: 'login', pathMatch: 'full' }
 ];

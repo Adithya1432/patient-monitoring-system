@@ -1,0 +1,19 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Shared.Protos.Optimization";
+
+service OptimizationService {
+  rpc GetActiveRules (EmptyRequest)
+      returns (OptimizationRulesResponse);
+}
+
+message EmptyRequest {}
+
+message OptimizationRule {
+  string ruleName = 1;
+  string ruleValue = 2;
+}
+
+message OptimizationRulesResponse {
+  repeated OptimizationRule rules = 1;
+}

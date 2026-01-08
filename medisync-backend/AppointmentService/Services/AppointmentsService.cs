@@ -2,6 +2,7 @@
 using AppointmentService.Interfaces;
 using AppointmentService.Models;
 using Shared.Protos.DoctorAvailability;
+using Shared.Protos.Optimization;
 using Shared.Protos.User;
 
 namespace AppointmentService.Services
@@ -9,28 +10,42 @@ namespace AppointmentService.Services
     public class AppointmentsService : IAppointmentService
     {
         private readonly DoctorUserService.DoctorUserServiceClient _userClient;
-        private readonly DoctorAvailabilityCheckService.DoctorAvailabilityCheckServiceClient _availabilityClient;
+        private readonly DoctorAvailabilityCheckService.DoctorAvailabilityCheckServiceClient _doctorAvailabilityClient;
+        private readonly OptimizationService.OptimizationServiceClient _optimizationClient;
         private readonly IAppointmentRepository _repository;
 
         public AppointmentsService(
             DoctorUserService.DoctorUserServiceClient userClient,
-            DoctorAvailabilityCheckService.DoctorAvailabilityCheckServiceClient availabilityClient,
+            DoctorAvailabilityCheckService.DoctorAvailabilityCheckServiceClient docotrAvailabilityClient,
+            OptimizationService.OptimizationServiceClient optimizationClient,
             IAppointmentRepository repository)
         {
             _userClient = userClient;
-            _availabilityClient = availabilityClient;
+            _doctorAvailabilityClient = docotrAvailabilityClient;
+            _optimizationClient = optimizationClient;
             _repository = repository;
         }
 
         public async Task<BookAppointmentResponseDto> BookAsync(
             BookAppointmentRequestDto request)
         {
-            var start = request.PreferredDate.ToDateTime(TimeOnly.FromTimeSpan(request.PreferredTime));
+            // 🔹 Get optimization rules
+            var rulesResponse = await _optimizationClient.GetActiveRulesAsync(
+                new EmptyRequest());
 
-            var end = start.AddMinutes(30);
+            var config = MapRules(rulesResponse);
 
+            var start = request.PreferredDate.ToDateTime(
+                TimeOnly.FromTimeSpan(request.PreferredTime));
 
-            // 1️⃣ Get doctors by speciality
+            if (start < DateTime.Now.AddHours(config.MinHoursBeforeBooking))
+                throw new Exception("Booking too soon");
+
+            if (start > DateTime.Now.AddDays(config.MaxDaysInAdvanceBooking))
+                throw new Exception("Booking too far in advance");
+
+            var end = start.AddMinutes(config.DefaultAppointmentDurationMinutes);
+
             var doctors = await _userClient.GetDoctorsBySpecialityAsync(
                 new Shared.Protos.User.SpecialityRequest
                 {
@@ -40,13 +55,11 @@ namespace AppointmentService.Services
             if (!doctors.Doctors.Any())
                 throw new Exception("No doctors available");
 
-            // 2️⃣ Try each doctor
             foreach (var doctor in doctors.Doctors)
             {
                 var doctorId = Guid.Parse(doctor.DoctorId);
 
-                // 2a️⃣ Check availability service
-                var availability = await _availabilityClient.IsDoctorAvailableAsync(
+                var availability = await _doctorAvailabilityClient.IsDoctorAvailableAsync(
                     new Shared.Protos.DoctorAvailability.DoctorAvailabilityRequest
                     {
                         DoctorId = doctor.DoctorId,
@@ -57,14 +70,20 @@ namespace AppointmentService.Services
                 if (!availability.IsAvailable)
                     continue;
 
-                // 2b️⃣ Check appointment overlap (OWN DB)
-                var hasOverlap = await _repository.HasOverlapAsync(
-                    doctorId, start, end);
-
-                if (hasOverlap)
+                if (await _repository.HasOverlapAsync(doctorId, start, end))
                     continue;
 
-                // 3️⃣ Book appointment
+                if (await _repository.GetDailyAppointmentCountAsync(
+                        doctorId, request.PreferredDate) >=
+                    config.MaxAppointmentsPerDay)
+                    continue;
+
+                if (await _repository.GetDailyWorkingMinutesAsync(
+                        doctorId, request.PreferredDate) +
+                    config.DefaultAppointmentDurationMinutes >
+                    config.MaxDailyWorkingHours * 60)
+                    continue;
+
                 var appointment = new Appointment
                 {
                     AppointmentId = Guid.NewGuid(),
@@ -92,6 +111,36 @@ namespace AppointmentService.Services
 
             throw new Exception("No available slot for the preferred time");
         }
-    
+
+        private BookingOptimizationConfig MapRules(
+            OptimizationRulesResponse response)
+        {
+            var dict = response.Rules
+                .ToDictionary(r => r.RuleName, r => r.RuleValue);
+
+            int GetInt(string key, int def)
+                => dict.ContainsKey(key) ? int.Parse(dict[key]) : def;
+
+            string GetString(string key, string def)
+                => dict.ContainsKey(key) ? dict[key] : def;
+
+            return new BookingOptimizationConfig
+            {
+                DefaultAppointmentDurationMinutes =
+                    GetInt("DEFAULT_APPOINTMENT_DURATION_MINUTES", 30),
+                AppointmentBufferMinutes =
+                    GetInt("APPOINTMENT_BUFFER_MINUTES", 0),
+                MaxAppointmentsPerDay =
+                    GetInt("MAX_APPOINTMENTS_PER_DAY", int.MaxValue),
+                MaxDailyWorkingHours =
+                    GetInt("MAX_DAILY_WORKING_HOURS", int.MaxValue),
+                MinHoursBeforeBooking =
+                    GetInt("MIN_HOURS_BEFORE_BOOKING", 0),
+                MaxDaysInAdvanceBooking =
+                    GetInt("MAX_DAYS_IN_ADVANCE_BOOKING", int.MaxValue),
+                DoctorAssignmentStrategy =
+                    GetString("DOCTOR_ASSIGNMENT_STRATEGY", "LEAST_WORKLOAD")
+            };
+        }
     }
 }

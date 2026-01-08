@@ -5,6 +5,7 @@ using AppointmentService.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Shared.Protos.User;
 using Shared.Protos.DoctorAvailability;
+using Shared.Protos.Optimization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,14 @@ builder.Services.AddGrpcClient<DoctorAvailabilityCheckService.DoctorAvailability
     {
         o.Address = new Uri("https://localhost:7003");
     });
+
+builder.Services.AddGrpcClient<OptimizationService.OptimizationServiceClient>(o =>
+{
+o.Address = new Uri("https://localhost:7005");
+});
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

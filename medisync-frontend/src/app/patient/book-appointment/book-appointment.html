@@ -1,0 +1,27 @@
+<div class="container">
+  <h2>Book Appointment</h2>
+
+  <label>Speciality</label>
+  <input
+    type="text"
+    [(ngModel)]="speciality"
+    placeholder="e.g. Cardiology" />
+
+  <label>Preferred Date</label>
+  <input
+    type="date"
+    [(ngModel)]="preferredDate" />
+
+  <label>Preferred Time</label>
+  <input
+    type="time"
+    [(ngModel)]="preferredTime" />
+
+  <button
+    (click)="bookAppointment()"
+    [disabled]="loading">
+    {{ loading ? 'Booking...' : 'Book Appointment' }}
+  </button>
+
+  <p class="message">{{ message }}</p>
+</div>
